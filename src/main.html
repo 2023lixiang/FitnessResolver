@@ -28,6 +28,19 @@
         </div>
         <h3>PS：因为误差原因配速会比设置的小，将条拉到最右边可以停止移动</h3>
     </div>
+    <div><b>务必在开始前选择好模式</b></div>
+    <div id="end_mode" style="display: inline-flex;">
+        <div> <label> <input id="endless" type="radio" name="auto_end" checked> 无尽模式 </label> </div>
+        <div> <label>
+                <input id="time_limit" type="radio" name="auto_end">
+                <input id="time_limit_count" type="number" style="width:50px;"> 分钟后
+            </label> </div>
+        <div> <label>
+                <input id="distance_limit" type="radio" name="auto_end">
+                <input id="distance_limit_count" type="number" style="width:50px;">公里后
+            </label> </div>
+        自动结束
+    </div>
     <div>
         <p>当前进度</p>
         <p id="progress"></p>

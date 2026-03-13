@@ -7,13 +7,27 @@ window.onload = _ => window.changeSpeed()
 window.onClickStart = _ => {
     document.getElementById('start').disabled = true
     document.getElementById('end').disabled = false
+    recursionSetDisable(document.getElementById('end_mode'), true)
     startRunning()
 }
 
 window.onClickEnd = _ => {
+    manualEnd()
+}
+
+const manualEnd = async _ => {
     document.getElementById('start').disabled = false
     document.getElementById('end').disabled = true
-    endRunning()
+    recursionSetDisable(document.getElementById('end_mode'), false)
+    await endRunning()
+}
+
+const recursionSetDisable = (div, disable) => {
+    div.disabled = true;
+    let elements = div.querySelectorAll('*');
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].disabled = disable;
+    }
 }
 
 window.changeSpeed = _ => {
@@ -47,7 +61,12 @@ const heartbeat = async keep => {
     let data = await post(urls.heartbeat, constructData())
     if (data?.status ?? 0 != 0) alert(data.message)
     updateDisplay()
-    if (keep) timeoutId = setTimeout(() => heartbeat(true), 1000);
+    if (keep)
+        if (stopConditionMeet()) {
+            await manualEnd()
+            alert('已自动结束')
+        }
+        else timeoutId = setTimeout(() => heartbeat(true), 1000)
 }
 
 const endRunning = async _ => {
@@ -55,6 +74,24 @@ const endRunning = async _ => {
     heartbeat(false)
     let data = await post(urls.end, constructData())
     if (data?.status ?? 0 != 0) alert(data.message)
+}
+
+const stopConditionMeet = _ => {
+    if (document.getElementById('time_limit').checked) {
+        let minute = +document.getElementById('time_limit_count').value
+        if (Number.isFinite(minute)) {
+            let acutualTime = (new Date().getTime() - startTime) / 1000 / 60
+            if (acutualTime >= minute) return true
+        }
+    }
+    else if (document.getElementById('distance_limit').checked) {
+        let km = +document.getElementById('distance_limit_count').value
+        if (Number.isFinite(km)) {
+            let actualKm = Math.floor(calculatedDistance) / 1000
+            if (actualKm >= km) return true
+        }
+    }
+    return false
 }
 
 const constructData = _ => {

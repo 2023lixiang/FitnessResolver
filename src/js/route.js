@@ -63,8 +63,8 @@ const getTrackPosition = (distance, centerLat = latitude, centerLng = longitude,
 
     // 5.掺入柏林噪声，实现更真实的轨迹
     // 平滑一些所以/32
-    x += perlinX.octaveNoise(distance / 32, 8, 0.5, -5, 5)
-    y += perlinY.octaveNoise(distance / 32, 8, 0.5, -5, 5)
+    x += perlinX.octaveNoise(distance / 32, 8, 0.5, -10, 10)
+    y += perlinY.octaveNoise(distance / 32, 8, 0.5, -10, 10)
 
     // 6. 坐标旋转（核心：将东西向转换为南北向或自定义角度）
     const rotationRad = rotation * Math.PI / 180; // 角度转弧度

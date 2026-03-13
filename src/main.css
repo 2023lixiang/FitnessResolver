@@ -25,3 +25,7 @@ input {
   outline: none;
   transition: border-color .3s
 }
+
+input[type="radio" i] {
+  width: 20px;
+}
